@@ -8,12 +8,23 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    //컬렉션뷰 생성
+    let menuCollectionView: UICollectionView = UICollectionView()
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        //배경화면
+        view.backgroundColor = .systemBackground
+
+        configureUI()
     }
 
+    func configureUI() {
+        
+        
+    }
 
 }
 
