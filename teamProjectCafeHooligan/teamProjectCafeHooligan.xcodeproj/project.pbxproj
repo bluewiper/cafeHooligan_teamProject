@@ -22,7 +22,6 @@
 		0451ECA92C365B6B00270737 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		04530AD72C37B03800980813 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 =======
-		2335018F2C36EAEC00EA2B37 /* Beiruti-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Beiruti-Medium.ttf"; sourceTree = "<group>"; };
 >>>>>>> main
 		237A270C2C3535D000627133 /* teamProjectCafeHooligan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = teamProjectCafeHooligan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		237A270F2C3535D000627133 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
