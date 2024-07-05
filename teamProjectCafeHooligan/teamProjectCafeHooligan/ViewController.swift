@@ -112,6 +112,7 @@ class OrderTableCell: UITableViewCell {
         label.backgroundColor = #colorLiteral(red: 0.8901960784, green: 0.8901960784, blue: 0.8901960784, alpha: 1)
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
+        label.font = UIFont.font(.beirutiMedium, ofSize: 18)
         return label
     }()
     //가격 레이블
@@ -119,8 +120,7 @@ class OrderTableCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        //        label.backgroundColor = .red
-        label.font = .systemFont(ofSize: 16)
+        label.font = UIFont.font(.beirutiMedium, ofSize: 18)
         return label
     }()
     //메뉴명 레이블
@@ -128,8 +128,7 @@ class OrderTableCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        label.font = .systemFont(ofSize: 16)
-        //        label.backgroundColor = .red
+        label.font = UIFont.font(.beirutiMedium, ofSize: 18)
         label.textColor = UIColor.black
         return label
     }()
@@ -450,7 +449,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             topOverLayView.topAnchor.constraint(equalTo: tableView.topAnchor),
             topOverLayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topOverLayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topOverLayView.heightAnchor.constraint(equalToConstant: 13),
+            topOverLayView.heightAnchor.constraint(equalToConstant: 10),
             
             buttonContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 35),
             buttonContainer.heightAnchor.constraint(equalToConstant: 96),
@@ -557,6 +556,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 16)
         label.text = "0"
+        label.font = UIFont.font(.beirutiMedium, ofSize: 18)
         label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         label.isUserInteractionEnabled = false
         
@@ -567,7 +567,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let deleteLabel = UILabel()
         deleteLabel.translatesAutoresizingMaskIntoConstraints = false
-        deleteLabel.font = .systemFont(ofSize: 16)
+        deleteLabel.font = UIFont.font(.beirutiMedium, ofSize: 18)
         deleteLabel.text = "DELETE"
         deleteLabel.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         deleteLabel.isUserInteractionEnabled = false
@@ -605,14 +605,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 16)
+        label.font = UIFont.font(.beirutiMedium, ofSize: 18)
         label.text = "0.0"
         label.textColor = .white
         label.isUserInteractionEnabled = false
         
         let checkOutLabel = UILabel()
         checkOutLabel.translatesAutoresizingMaskIntoConstraints = false
-        checkOutLabel.font = .systemFont(ofSize: 16)
+        checkOutLabel.font = UIFont.font(.beirutiMedium, ofSize: 18)
         checkOutLabel.text = "CHECK OUT"
         checkOutLabel.textColor = .white
         checkOutLabel.isUserInteractionEnabled = false
