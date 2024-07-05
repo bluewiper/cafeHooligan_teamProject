@@ -452,7 +452,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             topOverLayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             topOverLayView.heightAnchor.constraint(equalToConstant: 13),
             
-            buttonContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 30),
+            buttonContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 35),
             buttonContainer.heightAnchor.constraint(equalToConstant: 96),
             buttonContainer.widthAnchor.constraint(equalToConstant: 393),
             
@@ -471,11 +471,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor, constant: -25),
+            tableView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor, constant: -20),
             tableView.heightAnchor.constraint(equalToConstant: 244)
             
         ])
-
+        
     }
     
     // MARK: - method
@@ -650,7 +650,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     
- 
+    
     //총 수량, 총 가격 로직
     func updateTotalItemsAndPrice() {
         let totalItems = menuItems.reduce(0) { $0 + $1.quantity }
@@ -665,6 +665,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         tableView.isScrollEnabled = !menuItems.isEmpty
+        
+        //아이템 없을 시 버튼 비활성화
+        if menuItems.isEmpty {
+            checkoutButton.isEnabled = false
+            checkoutButton.backgroundColor = checkoutButton.backgroundColor?.withAlphaComponent(0.5)
+        } else {
+            checkoutButton.isEnabled = true
+            checkoutButton.backgroundColor = checkoutButton.backgroundColor?.withAlphaComponent(1.0)
+        }
     }
     
     //전체 삭제 버튼 로직
@@ -837,4 +846,4 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
 }
- 
+
