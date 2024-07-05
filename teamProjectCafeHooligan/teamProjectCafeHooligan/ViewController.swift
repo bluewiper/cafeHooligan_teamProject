@@ -24,6 +24,10 @@ extension UIFont {
     @nonobjc class var h1: UIFont {
         return UIFont.font(.beirutiMedium, ofSize: 24)
     }
+    
+    @nonobjc class var h2: UIFont {
+        return UIFont.font(.beirutiMedium, ofSize: 18)
+    }
 }
 
 // B. ColorSet에 지정한 UIColor : 시스템모드 변경 시 자유로운 색 변경

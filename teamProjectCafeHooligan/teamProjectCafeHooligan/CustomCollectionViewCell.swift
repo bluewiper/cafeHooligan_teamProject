@@ -28,7 +28,7 @@ class MenuItemCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.font = UIFont.h2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -38,7 +38,7 @@ class MenuItemCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.font = UIFont.h2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -78,6 +78,7 @@ class MenuItemCell: UICollectionViewCell {
     
     // V 셀을 구성하는 메서드를 정의합니다.
     func configure(with menuItem: MenuItem) {
+        // V 이미지 에셋 업로드 되면 systemName -> named로 변경
         imageView.image = UIImage(systemName: menuItem.imageName)
         nameLabel.text = menuItem.menuName
         priceLabel.text = "\(menuItem.menuPrice)"

@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0429B3572C37C503004283B3 /* Beiruti-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0429B3562C37C503004283B3 /* Beiruti-VariableFont_wght.ttf */; };
 		0451ECAA2C365B6B00270737 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0451ECA92C365B6B00270737 /* Data.swift */; };
 		04530AD82C37B03800980813 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04530AD72C37B03800980813 /* CustomCollectionViewCell.swift */; };
-		233501902C36EAEC00EA2B37 /* Beiruti-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2335018F2C36EAEC00EA2B37 /* Beiruti-Medium.ttf */; };
+		233501902C36EAEC00EA2B37 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		237A27102C3535D000627133 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A270F2C3535D000627133 /* AppDelegate.swift */; };
 		237A27122C3535D000627133 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A27112C3535D000627133 /* SceneDelegate.swift */; };
 		237A27142C3535D000627133 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A27132C3535D000627133 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0429B3562C37C503004283B3 /* Beiruti-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Beiruti-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		0451ECA92C365B6B00270737 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		04530AD72C37B03800980813 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		237A270C2C3535D000627133 /* teamProjectCafeHooligan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = teamProjectCafeHooligan.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,7 +45,7 @@
 		2335018E2C36EAC100EA2B37 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				2335018F2C36EAEC00EA2B37 /* Beiruti-Medium.ttf */,
+				0429B3562C37C503004283B3 /* Beiruti-VariableFont_wght.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -138,7 +140,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				233501902C36EAEC00EA2B37 /* Beiruti-Medium.ttf in Resources */,
+				0429B3572C37C503004283B3 /* Beiruti-VariableFont_wght.ttf in Resources */,
+				233501902C36EAEC00EA2B37 /* (null) in Resources */,
 				237A27192C3535D200627133 /* Assets.xcassets in Resources */,
 				237A271C2C3535D200627133 /* Base in Resources */,
 			);
