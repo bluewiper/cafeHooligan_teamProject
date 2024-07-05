@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		233501902C36EAEC00EA2B37 /* Beiruti-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2335018F2C36EAEC00EA2B37 /* Beiruti-Medium.ttf */; };
 		237A27102C3535D000627133 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A270F2C3535D000627133 /* AppDelegate.swift */; };
 		237A27122C3535D000627133 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A27112C3535D000627133 /* SceneDelegate.swift */; };
 		237A27142C3535D000627133 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A27132C3535D000627133 /* ViewController.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2335018F2C36EAEC00EA2B37 /* Beiruti-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Beiruti-Medium.ttf"; sourceTree = "<group>"; };
 		237A270C2C3535D000627133 /* teamProjectCafeHooligan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = teamProjectCafeHooligan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		237A270F2C3535D000627133 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		237A27112C3535D000627133 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,6 +37,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2335018E2C36EAC100EA2B37 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				2335018F2C36EAEC00EA2B37 /* Beiruti-Medium.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		237A27032C3535D000627133 = {
 			isa = PBXGroup;
 			children = (
@@ -54,6 +64,7 @@
 		237A270E2C3535D000627133 /* teamProjectCafeHooligan */ = {
 			isa = PBXGroup;
 			children = (
+				2335018E2C36EAC100EA2B37 /* Fonts */,
 				237A270F2C3535D000627133 /* AppDelegate.swift */,
 				237A27112C3535D000627133 /* SceneDelegate.swift */,
 				237A27132C3535D000627133 /* ViewController.swift */,
@@ -122,6 +133,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				233501902C36EAEC00EA2B37 /* Beiruti-Medium.ttf in Resources */,
 				237A27192C3535D200627133 /* Assets.xcassets in Resources */,
 				237A271C2C3535D200627133 /* Base in Resources */,
 			);
