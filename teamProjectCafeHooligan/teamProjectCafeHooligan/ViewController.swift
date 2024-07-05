@@ -8,6 +8,8 @@
 import UIKit
 //3단합체 완료입니다.
 
+
+
 // B. 커스텀폰트 추가
 enum FontName: String {
     case beirutiMedium = "Beiruti-Medium"
@@ -45,12 +47,12 @@ extension UIColor {
 // MARK: - 클래스 밖
 extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        4
+        return menuItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = menuCollectionView.dequeueReusableCell(withReuseIdentifier: "MenuCell", for: indexPath) as! MenuItemCell
-        cell.configure(with: MenuItem.recommended_Menu[indexPath.item])
+        let cell = menuCollectionView.dequeueReusableCell(withReuseIdentifier: MenuItemCell.identifier, for: indexPath) as! MenuItemCell
+        cell.configure(with: menuItems[indexPath.item])
         return cell
     }
     
@@ -275,10 +277,17 @@ class CustomButton: UIButton {
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, OrderTableCellDelegate {
     
+//    
+//    let categories = ["Best", "Coffee", "Drink", "Bites", "Pizza"]
+//    let categoryTitles = ["Best", "Coffee", "Drink", "Bites", "Pizza"]
+//    let categoriesImage = ["cup.and.saucer", "wineglass", "carrot", "fork.knife", "birthday.cake"]
     
-    let categories = ["coffeeCup", "drink", "bites", "pizza", "cookie"]
-    let categoryTitles = ["Coffee Cup", "Drink", "Bites", "Pizza", "Cookie"]
-    let categoriesImage = ["cup.and.saucer", "wineglass", "carrot", "fork.knife", "birthday.cake"]
+    let categoriesLightMode = Category_LightMode.category_LightMode
+    let categoriesDarkMode = Category_DarkMode.category_DarkMode
+    var menuItems = MenuItem.best_Menu
+    
+    
+    
     
     // 컬렉션뷰 생성
     let menuCollectionView: UICollectionView = {
@@ -405,15 +414,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         ])
         
         // Add buttons to the stack view
-        for i in 0..<categoriesImage.count {
-            let button = createCategoryButton(imageName: categoriesImage[i], title: categoryTitles[i])
+        for (index, _) in categoriesLightMode.enumerated() {
+            let button = createCategoryButton(imageName: categoriesDarkMode[index].categoryImageName, title: categoriesDarkMode[index].name, tag: index)
             stackView.addArrangedSubview(button)
+        }
+        // 기본적으로 "Best" 버튼에 스트로크 설정
+        if let bestButton = stackView.arrangedSubviews.first as? UIButton {
+            bestButton.layer.borderWidth = 2
+            bestButton.layer.borderColor = UIColor.red.cgColor
         }
         
         menuCollectionView.delegate = self
         menuCollectionView.dataSource = self
         
         view.addSubview(menuCollectionView)
+        
+        menuCollectionView.register(MenuItemCell.self, forCellWithReuseIdentifier: MenuItemCell.identifier)
         
         menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -483,17 +499,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     // MARK: - method
-    func createCategoryButton(imageName: String, title: String) -> UIButton {
+    func createCategoryButton(imageName: String, title: String, tag: Int) -> UIButton {
         let button = UIButton(type: .system)
+        
         button.backgroundColor = .white
         button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
+       
         button.translatesAutoresizingMaskIntoConstraints = false
         
+        button.tag = tag
+        button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+        
         // Image
-        let imageView = UIImageView(image: UIImage(systemName: imageName))
+        let imageView = UIImageView(image: UIImage(named: imageName))
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = false
         imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
@@ -504,6 +526,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         label.textColor = .black
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
         
         // Stack view for image and label
         let innerStackView = UIStackView(arrangedSubviews: [imageView, label])
@@ -511,6 +534,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         innerStackView.alignment = .center
         innerStackView.spacing = 8
         innerStackView.translatesAutoresizingMaskIntoConstraints = false
+        innerStackView.isUserInteractionEnabled = false
         
         button.addSubview(innerStackView)
         
@@ -648,12 +672,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         view.backgroundColor = #colorLiteral(red: 0.8901960784, green: 0.8901960784, blue: 0.8901960784, alpha: 1)
         return view
     }()
-    
+    // 카테고리 데이터
+//    let categoriesLightMode = Category_LightMode.category_LightMode
+//    let categoriesDarkMode = Category_DarkMode.category_DarkMode
+//
     //메뉴 아이템 입력
-    var menuItems = MenuItem.recommended_Menu
-    
-    
-    
+//    var menuItems = MenuItem.best_Menu
  
     //총 수량, 총 가격 로직
     func updateTotalItemsAndPrice() {
@@ -839,6 +863,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             updateTotalItemsAndPrice()
         }
     }
-    
+    // 카테고리 버튼 클릭시 태그 전달
+    @objc func categoryButtonTapped(_ sender: UIButton) {
+           for case let button as UIButton in (sender.superview?.subviews ?? []) {
+               button.layer.borderWidth = 0
+               button.layer.borderColor = UIColor.clear.cgColor
+           }
+           
+           sender.layer.borderWidth = 2
+           sender.layer.borderColor = UIColor.red.cgColor
+        
+        switch sender.tag {
+        case 0:
+            menuItems = MenuItem.best_Menu
+        case 1:
+            menuItems = MenuItem.coffee_Menu
+        case 2:
+            menuItems = MenuItem.drinks_Menu
+        case 3:
+            menuItems = MenuItem.bites_Menu
+        case 4:
+            menuItems = MenuItem.pizza_Menu
+        default:
+            menuItems = []
+        }
+        menuCollectionView.reloadData() // 데이터 변경 후 컬렉션뷰 리로드
+    }
 }
  
