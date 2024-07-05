@@ -145,7 +145,7 @@ class ViewController: UIViewController {
         }
     }
     
-    // B. 시스템 모드에 따라 토글 버튼 아이콘 업데이트
+    // B. 시스템 모드에 따라 토글 버튼 아이콘 및 로고 업데이트
     private func updateToggleButtonIcon() {
         let isLightMode = traitCollection.userInterfaceStyle == .light
         
@@ -156,5 +156,9 @@ class ViewController: UIViewController {
         let moonIcon = moonImage?.withConfiguration(configuration)
         
         modeToggleButton.setImage(isLightMode ? moonIcon : sunIcon, for: .normal)
+        
+        // B. 로고 이미지 업데이트
+        let logoImageName = isLightMode ? "Logo_light" : "Logo_dark"
+        logoImageView.image = UIImage(named: logoImageName)
     }
 }
