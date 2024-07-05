@@ -5,7 +5,7 @@ struct MenuItem {
     let imageName: String
     let menuName: String
     let menuPrice: Double
-    let quantity: Int
+    var quantity: Int
 }
 
 
