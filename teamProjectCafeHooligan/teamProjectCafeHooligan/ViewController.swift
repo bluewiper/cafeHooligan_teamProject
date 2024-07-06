@@ -685,14 +685,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     //결제완료 버튼 로직
     @objc func checkoutButtonTapped() {
-        if menuItems.isEmpty {
-            showEmptyCartAlert()
-        } else {
+       
             self.menuItems.removeAll()
             self.tableView.reloadData()
             self.updateTotalItemsAndPrice()
             self.showEnjoyYourCoffee()
-        }
+        
     }
     //빈 장바구니 알림창
     func showEmptyCartAlert() {
