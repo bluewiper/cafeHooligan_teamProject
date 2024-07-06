@@ -28,6 +28,8 @@ class MenuItemCell: UICollectionViewCell {
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.h2
+        label.textColor = .textColor
+        label.font = .h2//UIFont.systemFont(ofSize: 18, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -38,6 +40,8 @@ class MenuItemCell: UICollectionViewCell {
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.h2
+        label.textColor = .textColor
+        label.font = .h2//UIFont.systemFont(ofSize: 18, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -45,7 +49,7 @@ class MenuItemCell: UICollectionViewCell {
     // V 초기화 메서드를 정의합니다.
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .darkGray
+        contentView.backgroundColor = .color1 //.darkGray
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
         contentView.addSubview(imageView)
