@@ -62,11 +62,11 @@ struct Category_LightMode {
 extension Category_LightMode{
     
     static let category_LightMode = [
-        Category_LightMode(name: "Best", categoryImageName: "category_all_light"),
-        Category_LightMode(name: "Coffee", categoryImageName: "category_coffee_light"),
-        Category_LightMode(name: "Drinks", categoryImageName: "category_drink_light"),
-        Category_LightMode(name: "Bites", categoryImageName: "category_cookie_light"),
-        Category_LightMode(name: "Pizza", categoryImageName: "category_pizza_light")
+        Category_LightMode(name: "Best", categoryImageName: "logoImage"),
+        Category_LightMode(name: "Coffee", categoryImageName: "category_coffee"),
+        Category_LightMode(name: "Drinks", categoryImageName: "category_drink"),
+        Category_LightMode(name: "Bites", categoryImageName: "category_cookie"),
+        Category_LightMode(name: "Pizza", categoryImageName: "category_pizza")
     ]
 }
 //다크모드 카테고리
@@ -78,10 +78,10 @@ struct Category_DarkMode {
 extension Category_DarkMode {
     
     static let category_DarkMode = [
-        Category_LightMode(name: "Best", categoryImageName: "category_all_dark"),
-        Category_LightMode(name: "Coffee", categoryImageName: "category_coffee_dark"),
-        Category_LightMode(name: "Drinks", categoryImageName: "category_drink_dark"),
-        Category_LightMode(name: "Bites", categoryImageName: "category_cookie_dark"),
-        Category_LightMode(name: "Pizza", categoryImageName: "category_pizza_dark")
+        Category_LightMode(name: "Best", categoryImageName: "logoImage"),
+        Category_LightMode(name: "Coffee", categoryImageName: "category_coffee"),
+        Category_LightMode(name: "Drinks", categoryImageName: "category_drink"),
+        Category_LightMode(name: "Bites", categoryImageName: "category_cookie"),
+        Category_LightMode(name: "Pizza", categoryImageName: "category_pizza")
     ]
 }

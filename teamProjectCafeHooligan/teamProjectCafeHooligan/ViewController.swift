@@ -29,9 +29,6 @@ extension UIFont {
         return UIFont.font(.beirutiMedium, ofSize: 24)
     }
     
-    @nonobjc class var h2: UIFont {
-        return UIFont.font(.beirutiMedium, ofSize: 18)
-    }
     /// B. beirutiMedium 20
     @nonobjc class var h2: UIFont {
         return UIFont.font(.beirutiMedium, ofSize: 20)
@@ -55,6 +52,8 @@ extension UIColor {
     class var color3: UIColor? { return UIColor(named: "color3Custom") }
     //// B. color4
     class var color4: UIColor? { return UIColor(named: "color4Custom") }
+    //// V. categoryBorderLineColor
+    class var borderLineColor: UIColor? {return UIColor(named: "borderLineCustom")}
     ////B. buttonColor
     class var buttonColor: UIColor? { return UIColor(named: "buttonColorCustom")}
     ////B. textColor
@@ -126,6 +125,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         // B. 현재 인터페이스 스타일에 따라 버튼 이미지 업데이트
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             updateToggleButtonIcon()
+            // V 카테고리 보더라인 변경
+//            updateButtonBorderColors()
         }
     }
     
@@ -178,7 +179,6 @@ class OrderTableCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 16)
-//                label.backgroundColor = .red
         label.textColor = UIColor.textColor
         return label
     }()
@@ -231,6 +231,7 @@ class OrderTableCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -320,11 +321,7 @@ class CustomButton: UIButton {
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, OrderTableCellDelegate {
     
-//    
-//    let categories = ["Best", "Coffee", "Drink", "Bites", "Pizza"]
-//    let categoryTitles = ["Best", "Coffee", "Drink", "Bites", "Pizza"]
-//    let categoriesImage = ["cup.and.saucer", "wineglass", "carrot", "fork.knife", "birthday.cake"]
-    
+    // V 카테고리 통일 예정
     let categoriesLightMode = Category_LightMode.category_LightMode
     let categoriesDarkMode = Category_DarkMode.category_DarkMode
     var menuItems = MenuItem.best_Menu
@@ -463,7 +460,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // 기본적으로 "Best" 버튼에 스트로크 설정
         if let bestButton = stackView.arrangedSubviews.first as? UIButton {
             bestButton.layer.borderWidth = 2
-            bestButton.layer.borderColor = UIColor.red.cgColor
+            bestButton.layer.borderColor = UIColor.borderLineColor?.cgColor
         }
         
         menuCollectionView.delegate = self
@@ -537,7 +534,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             tableView.heightAnchor.constraint(equalToConstant: 244)
             
         ])
-
     }
     
     // MARK: - method
@@ -548,7 +544,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         button.backgroundColor = .reversedButtonColor
         button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
-       
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.tag = tag
@@ -715,13 +710,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         view.backgroundColor = .color3
         return view
     }()
-    // 카테고리 데이터
-//    let categoriesLightMode = Category_LightMode.category_LightMode
-//    let categoriesDarkMode = Category_DarkMode.category_DarkMode
-//
+    
     //메뉴아이템 입력 변수명 변경 menuItems -> celected_Menu
     var celected_Menu: [MenuItem] = []
- 
+    
     //총 수량, 총 가격 로직
     func updateTotalItemsAndPrice() {
         let totalItems = celected_Menu.reduce(0) { $0 + $1.quantity }
@@ -906,15 +898,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             updateTotalItemsAndPrice()
         }
     }
+    
+    
+//    // V 카테고리 보더라인 변경 함수
+//    private func updateButtonBorderColors() {
+//        view.recursiveSubviews.forEach { subview in
+//            if let button = subview as? UIButton, button.layer.borderWidth == 2 {
+//                button.layer.borderColor = UIColor.borderLineColor?.cgColor
+//            }
+//        }
+//    }
+    
+    
+    
     // 카테고리 버튼 클릭시 태그 전달
     @objc func categoryButtonTapped(_ sender: UIButton) {
-           for case let button as UIButton in (sender.superview?.subviews ?? []) {
-               button.layer.borderWidth = 0
-               button.layer.borderColor = UIColor.clear.cgColor
-           }
-           
-           sender.layer.borderWidth = 2
-           sender.layer.borderColor = UIColor.red.cgColor
+        for case let button as UIButton in (sender.superview?.subviews ?? []) {
+            button.layer.borderWidth = 0
+            button.layer.borderColor = UIColor.clear.cgColor
+        }
+        
+        sender.layer.borderWidth = 2
+        sender.layer.borderColor = UIColor.borderLineColor?.cgColor
+//        updateButtonBorderColors()
         
         switch sender.tag {
         case 0:
@@ -933,6 +939,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         menuCollectionView.reloadData() // 데이터 변경 후 컬렉션뷰 리로드
     }
     
-    
 }
- 
+
+
+//extension UIView {
+//    var recursiveSubviews: [UIView] {
+//        return subviews + subviews.flatMap { $0.recursiveSubviews }
+//    }
+//}
