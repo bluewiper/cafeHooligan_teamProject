@@ -45,7 +45,7 @@ extension UIColor {
 
 
 // MARK: - 클래스 밖
-extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return menuItems.count
     }
@@ -62,6 +62,23 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedItem = menuItems[indexPath.item]
+        addToCart(menuItem: selectedItem)
+    }
+    
+    func addToCart(menuItem: MenuItem) {
+        if let index = celected_Menu.firstIndex(where: { $0.menuName == menuItem.menuName }) {
+            celected_Menu[index].quantity += 1
+        } else {
+            var newItem = menuItem
+            newItem.quantity = 1
+            celected_Menu.append(newItem)
+        }
+        tableView.reloadData()
+        updateTotalItemsAndPrice()
     }
     
     
@@ -100,7 +117,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         modeToggleButton.setImage(isLightMode ? moonIcon : sunIcon, for: .normal)
         
         // B. 로고 이미지 업데이트
-        let logoImageName = isLightMode ? "Logo_light" : "Logo_dark"
+        let logoImageName = isLightMode ? "logo_main_light" : "logo_main_dark"
         logoImageView.image = UIImage(named: logoImageName)
     }
 }
@@ -676,13 +693,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //    let categoriesLightMode = Category_LightMode.category_LightMode
 //    let categoriesDarkMode = Category_DarkMode.category_DarkMode
 //
-    //메뉴 아이템 입력
-//    var menuItems = MenuItem.best_Menu
+    //메뉴아이템 입력 변수명 변경 menuItems -> celected_Menu
+    var celected_Menu: [MenuItem] = []
  
     //총 수량, 총 가격 로직
     func updateTotalItemsAndPrice() {
-        let totalItems = menuItems.reduce(0) { $0 + $1.quantity }
-        let totalPrice = menuItems.reduce(0.0) { $0 + ($1.menuPrice * Double($1.quantity)) }
+        let totalItems = celected_Menu.reduce(0) { $0 + $1.quantity }
+        let totalPrice = celected_Menu.reduce(0.0) { $0 + ($1.menuPrice * Double($1.quantity)) }
         
         if let deleteLabel = (deleteButton.subviews.first as? UIStackView)?.arrangedSubviews[0] as? UILabel {
             deleteLabel.text = "\(totalItems)"
@@ -692,22 +709,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             priceLabel.text = String(format: "%.1f", totalPrice)
         }
         
-        tableView.isScrollEnabled = !menuItems.isEmpty
+        tableView.isScrollEnabled = !celected_Menu.isEmpty
     }
     
     //전체 삭제 버튼 로직
     @objc func deleteButtonTapped() {
-        menuItems.removeAll()
+        celected_Menu.removeAll()
         tableView.reloadData()
         updateTotalItemsAndPrice()
     }
     
     //결제완료 버튼 로직
     @objc func checkoutButtonTapped() {
-        if menuItems.isEmpty {
+        if celected_Menu.isEmpty {
             showEmptyCartAlert()
         } else {
-            self.menuItems.removeAll()
+            self.celected_Menu.removeAll()
             self.tableView.reloadData()
             self.updateTotalItemsAndPrice()
             self.showEnjoyYourCoffee()
@@ -778,12 +795,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menuItems.isEmpty ? 1 : menuItems.count
+        return celected_Menu.isEmpty ? 1 : celected_Menu.count
     }
     
     // 셀 내부 요소 정보 표시
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if menuItems.isEmpty {
+        if celected_Menu.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyStateCell") ?? UITableViewCell(style: .default, reuseIdentifier: "EmptyStateCell")
             
             for subview in cell.contentView.subviews {
@@ -827,7 +844,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "OrderTableCell", for: indexPath) as! OrderTableCell
-            let menuItem = menuItems[indexPath.row]
+            let menuItem = celected_Menu[indexPath.row]
             
             cell.nameLabel.text = menuItem.menuName
             cell.priceLabel.text = "\(menuItem.menuPrice)"
@@ -842,7 +859,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     //테이블 뷰 셀 높이 설정
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if menuItems.isEmpty {
+        if celected_Menu.isEmpty {
             return UITableView.automaticDimension
         } else {
             return 78
@@ -851,14 +868,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // + 버튼 로직
     func didTapPlusButton(on cell: OrderTableCell, at indexPath: IndexPath) {
-        menuItems[indexPath.row].quantity += 1
+        celected_Menu[indexPath.row].quantity += 1
         tableView.reloadRows(at: [indexPath], with: .none)
         updateTotalItemsAndPrice()
     }
     // - 버튼 로직
     func didTapMinusButton(on cell: OrderTableCell, at indexPath: IndexPath) {
-        if menuItems[indexPath.row].quantity > 1 {
-            menuItems[indexPath.row].quantity -= 1
+        if celected_Menu[indexPath.row].quantity > 1 {
+            celected_Menu[indexPath.row].quantity -= 1
             tableView.reloadRows(at: [indexPath], with: .none)
             updateTotalItemsAndPrice()
         }
@@ -889,5 +906,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         menuCollectionView.reloadData() // 데이터 변경 후 컬렉션뷰 리로드
     }
+    
+    
 }
  
