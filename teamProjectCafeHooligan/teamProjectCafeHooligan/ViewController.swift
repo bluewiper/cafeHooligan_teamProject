@@ -6,11 +6,14 @@
 //
 
 import UIKit
+//3단합체 완료입니다.
+
 
 
 // B. 커스텀폰트 추가
 enum FontName: String {
     case beirutiMedium = "Beiruti-Medium"
+    case beirutiLight = "Beiruti-Light" // B. 빈 장바구니 텍스트를 위한 서체 추가(.h3)
 }
 
 extension UIFont {
@@ -25,28 +28,55 @@ extension UIFont {
     @nonobjc class var h1: UIFont {
         return UIFont.font(.beirutiMedium, ofSize: 24)
     }
+    
+    /// B. beirutiMedium 20
+    @nonobjc class var h2: UIFont {
+        return UIFont.font(.beirutiMedium, ofSize: 20)
+    }
+    
+    /// B. beirutiLight 16
+    @nonobjc class var h3: UIFont {
+        return UIFont.font(.beirutiLight, ofSize: 16)
+    }
+    
+    
 }
 
 // B. ColorSet에 지정한 UIColor : 시스템모드 변경 시 자유로운 색 변경
 extension UIColor {
-    /// B. Topbar
-    class var accentColorCustom: UIColor? { return UIColor(named: "AccentColor") }
-    /// B. Toggle Background Color
-    class var toggleButtonBackgroundCustom: UIColor? { return UIColor(named: "toggleButtonBackground") }
-    /// B. Toggle Symbol Color
-    class var toggleButtonSymbolCustom: UIColor? { return UIColor(named: "toggleButtonSymbol") }
+    /// B. color1
+    class var color1: UIColor? { return UIColor(named: "color1Custom") }
+    /// B. color2
+    class var color2: UIColor? { return UIColor(named: "color2Custom") }
+    /// B. color3
+    class var color3: UIColor? { return UIColor(named: "color3Custom") }
+    //// B. color4
+    class var color4: UIColor? { return UIColor(named: "color4Custom") }
+    //// V. categoryBorderLineColor
+    class var borderLineColor: UIColor? {return UIColor(named: "borderLineCustom")}
+    ////B. buttonColor
+    class var buttonColor: UIColor? { return UIColor(named: "buttonColorCustom")}
+    ////B. textColor
+    class var textColor: UIColor? { return UIColor(named: "textcolorCustom")}
+    ////B. exceptionColor
+    class var exceptionColor: UIColor? { return UIColor(named: "exceptionColorCustom")}
+    ////B. reversedButtonColor
+    class var reversedButtonColor: UIColor? { return UIColor(named: "reversedButtonColorCutom")}
+    
+    
+    
 }
 
 
 // MARK: - 클래스 밖
-extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        4
+        return menuItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = menuCollectionView.dequeueReusableCell(withReuseIdentifier: "MenuCell", for: indexPath) as! MenuItemCell
-        cell.configure(with: MenuItem.recommended_Menu[indexPath.item])
+        let cell = menuCollectionView.dequeueReusableCell(withReuseIdentifier: MenuItemCell.identifier, for: indexPath) as! MenuItemCell
+        cell.configure(with: menuItems[indexPath.item])
         return cell
     }
     
@@ -56,6 +86,23 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedItem = menuItems[indexPath.item]
+        addToCart(menuItem: selectedItem)
+    }
+    
+    func addToCart(menuItem: MenuItem) {
+        if let index = celected_Menu.firstIndex(where: { $0.menuName == menuItem.menuName }) {
+            celected_Menu[index].quantity += 1
+        } else {
+            var newItem = menuItem
+            newItem.quantity = 1
+            celected_Menu.append(newItem)
+        }
+        tableView.reloadData()
+        updateTotalItemsAndPrice()
     }
     
     
@@ -78,6 +125,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         // B. 현재 인터페이스 스타일에 따라 버튼 이미지 업데이트
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             updateToggleButtonIcon()
+            // V 카테고리 보더라인 변경
+//            updateButtonBorderColors()
         }
     }
     
@@ -94,8 +143,9 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         modeToggleButton.setImage(isLightMode ? moonIcon : sunIcon, for: .normal)
         
         // B. 로고 이미지 업데이트
-        let logoImageName = isLightMode ? "Logo_light" : "Logo_dark"
+        let logoImageName = isLightMode ? "logo_main_light" : "logo_main_dark"
         logoImageView.image = UIImage(named: logoImageName)
+        logoImageView.image = UIImage(named: "logoImage")
     }
 }
 
@@ -109,7 +159,7 @@ class OrderTableCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.backgroundColor = #colorLiteral(red: 0.8901960784, green: 0.8901960784, blue: 0.8901960784, alpha: 1)
+        label.backgroundColor = .color1
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         label.font = UIFont.font(.beirutiMedium, ofSize: 18)
@@ -130,6 +180,8 @@ class OrderTableCell: UITableViewCell {
         label.textAlignment = .left
         label.font = UIFont.font(.beirutiMedium, ofSize: 18)
         label.textColor = UIColor.black
+        label.font = .systemFont(ofSize: 16)
+        label.textColor = UIColor.textColor
         return label
     }()
     //플러스 버튼
@@ -137,8 +189,8 @@ class OrderTableCell: UITableViewCell {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = #colorLiteral(red: 0.8901961446, green: 0.8901961446, blue: 0.8901961446, alpha: 1)
-        button.tintColor = .black
+        button.backgroundColor = .color1
+        button.tintColor = .textColor
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -147,8 +199,8 @@ class OrderTableCell: UITableViewCell {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "minus"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = #colorLiteral(red: 0.8901961446, green: 0.8901961446, blue: 0.8901961446, alpha: 1)
-        button.tintColor = .black
+        button.backgroundColor = .color1
+        button.tintColor = .textColor
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -168,7 +220,7 @@ class OrderTableCell: UITableViewCell {
         stackView.alignment = .center
         stackView.spacing = 10
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.backgroundColor = .white
+        stackView.backgroundColor = .color2 // .white
         stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.layer.cornerRadius = 5
@@ -181,6 +233,7 @@ class OrderTableCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -270,10 +323,13 @@ class CustomButton: UIButton {
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, OrderTableCellDelegate {
     
+    // V 카테고리 통일 예정
+    let categoriesLightMode = Category_LightMode.category_LightMode
+    let categoriesDarkMode = Category_DarkMode.category_DarkMode
+    var menuItems = MenuItem.best_Menu
     
-    let categories = ["coffeeCup", "drink", "bites", "pizza", "cookie"]
-    let categoryTitles = ["Coffee Cup", "Drink", "Bites", "Pizza", "Cookie"]
-    let categoriesImage = ["cup.and.saucer", "wineglass", "carrot", "fork.knife", "birthday.cake"]
+    
+    
     
     // 컬렉션뷰 생성
     let menuCollectionView: UICollectionView = {
@@ -281,7 +337,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         // 속성
-        collectionView.backgroundColor = #colorLiteral(red: 0.9118670225, green: 0.9118669629, blue: 0.9118669629, alpha: 1)
+        collectionView.backgroundColor = .color2
         
         
         return collectionView
@@ -292,7 +348,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let containerView = UIView()
     
     // B. 시스템모드에 따라 변경할 로고 이미지
-    let logoImageView = UIImageView(image: UIImage(named: "Logo_dark"))
+    let logoImageView = UIImageView(image: UIImage(named: "logoImage"))
     
     // B. 시스템모드에 따른 토글 아이콘 사이즈 변경을 위한 UIImage 추가
     let sunImage = UIImage(systemName: "sun.max.fill")
@@ -302,7 +358,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .color1Custom
         
         // B. 로고 이미지
         logoImageView.contentMode = .scaleAspectFit
@@ -318,12 +374,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         modeToggleButton.addTarget(self, action: #selector(toggleMode), for: .touchUpInside)
         
         // B. 시스템모드에 따른 버튼 및 버튼 내 아이콘 색상값
-        modeToggleButton.backgroundColor = UIColor.toggleButtonBackground
-        modeToggleButton.tintColor = UIColor.toggleButtonSymbol
-        
+        modeToggleButton.backgroundColor = UIColor.color2
+        modeToggleButton.tintColor = UIColor.buttonColorCustom
         
         // B. 시스템모드에 따른 Container View 배경색상 전환
-        containerView.backgroundColor = UIColor.accentColorCustom
+        containerView.backgroundColor = UIColor.color1
         
         // B. 아이콘 설정
         modeToggleButton.layer.cornerRadius = 8
@@ -365,8 +420,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             horizontalStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0),
             
             // B. Logo Image 제약 설정
-            logoImageView.widthAnchor.constraint(equalToConstant: 40),
-            logoImageView.heightAnchor.constraint(equalToConstant: 40),
+            logoImageView.widthAnchor.constraint(equalToConstant: 30),
+            logoImageView.heightAnchor.constraint(equalToConstant: 30),
             modeToggleButton.widthAnchor.constraint(equalToConstant: 40),
             modeToggleButton.heightAnchor.constraint(equalToConstant: 40)
         ])
@@ -375,7 +430,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.backgroundColor = #colorLiteral(red: 0.9118670225, green: 0.9118669629, blue: 0.9118669629, alpha: 1)
+        scrollView.backgroundColor = .color1
         self.view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
@@ -400,15 +455,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         ])
         
         // Add buttons to the stack view
-        for i in 0..<categoriesImage.count {
-            let button = createCategoryButton(imageName: categoriesImage[i], title: categoryTitles[i])
+        for (index, _) in categoriesLightMode.enumerated() {
+            let button = createCategoryButton(imageName: categoriesDarkMode[index].categoryImageName, title: categoriesDarkMode[index].name, tag: index)
             stackView.addArrangedSubview(button)
+        }
+        // 기본적으로 "Best" 버튼에 스트로크 설정
+        if let bestButton = stackView.arrangedSubviews.first as? UIButton {
+            bestButton.layer.borderWidth = 2
+            bestButton.layer.borderColor = UIColor.borderLineColor?.cgColor
         }
         
         menuCollectionView.delegate = self
         menuCollectionView.dataSource = self
         
         view.addSubview(menuCollectionView)
+        
+        menuCollectionView.register(MenuItemCell.self, forCellWithReuseIdentifier: MenuItemCell.identifier)
         
         menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -478,17 +540,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     // MARK: - method
-    func createCategoryButton(imageName: String, title: String) -> UIButton {
+    func createCategoryButton(imageName: String, title: String, tag: Int) -> UIButton {
         let button = UIButton(type: .system)
+        
         button.backgroundColor = .white
+        button.backgroundColor = .reversedButtonColor
         button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         
+        button.tag = tag
+        button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+        
         // Image
-        let imageView = UIImageView(image: UIImage(systemName: imageName))
+        let imageView = UIImageView(image: UIImage(named: imageName))
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = false
         imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
@@ -496,9 +564,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let label = UILabel()
         label.text = title
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .black
+        label.textColor = .textColor
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
         
         // Stack view for image and label
         let innerStackView = UIStackView(arrangedSubviews: [imageView, label])
@@ -506,6 +575,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         innerStackView.alignment = .center
         innerStackView.spacing = 8
         innerStackView.translatesAutoresizingMaskIntoConstraints = false
+        innerStackView.isUserInteractionEnabled = false
         
         button.addSubview(innerStackView)
         
@@ -523,7 +593,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let topOverLayView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = #colorLiteral(red: 0.8901961446, green: 0.8901961446, blue: 0.8901961446, alpha: 1)
+        view.backgroundColor = .color3
         view.layer.cornerRadius = 5
         return view
     }()
@@ -531,7 +601,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let topLineView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        view.backgroundColor = .color2
         view.layer.opacity = 0.5
         return view
     }()
@@ -540,7 +610,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let tableView: UITableView = {
         let tv = UITableView()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = #colorLiteral(red: 0.8901961446, green: 0.8901961446, blue: 0.8901961446, alpha: 1)
+        tv.backgroundColor = .color3
         tv.layer.cornerRadius = 10
         return tv
     }()
@@ -549,7 +619,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let button = CustomButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        button.backgroundColor = .white
+        button.backgroundColor = .color2//.exceptionColor
         button.layer.cornerRadius = 5
         
         let label = UILabel()
@@ -594,7 +664,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let button = CustomButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .white
-        button.backgroundColor = #colorLiteral(red: 0.1921568627, green: 0.2196078431, blue: 0.262745098, alpha: 1)
+        button.backgroundColor = .color4
         button.layer.cornerRadius = 5
         
         
@@ -641,20 +711,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let buttonContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = #colorLiteral(red: 0.8901960784, green: 0.8901960784, blue: 0.8901960784, alpha: 1)
+        view.backgroundColor = .color3
         return view
     }()
     
-    //메뉴 아이템 입력
-    var menuItems = MenuItem.recommended_Menu
+    //메뉴아이템 입력 변수명 변경 menuItems -> celected_Menu
+    var celected_Menu: [MenuItem] = []
     
     
     
     
     //총 수량, 총 가격 로직
     func updateTotalItemsAndPrice() {
-        let totalItems = menuItems.reduce(0) { $0 + $1.quantity }
-        let totalPrice = menuItems.reduce(0.0) { $0 + ($1.menuPrice * Double($1.quantity)) }
+        let totalItems = celected_Menu.reduce(0) { $0 + $1.quantity }
+        let totalPrice = celected_Menu.reduce(0.0) { $0 + ($1.menuPrice * Double($1.quantity)) }
         
         if let deleteLabel = (deleteButton.subviews.first as? UIStackView)?.arrangedSubviews[0] as? UILabel {
             deleteLabel.text = "\(totalItems)"
@@ -674,11 +744,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             checkoutButton.isEnabled = true
             checkoutButton.backgroundColor = checkoutButton.backgroundColor?.withAlphaComponent(1.0)
         }
+        tableView.isScrollEnabled = !celected_Menu.isEmpty
     }
     
     //전체 삭제 버튼 로직
     @objc func deleteButtonTapped() {
-        menuItems.removeAll()
+        celected_Menu.removeAll()
         tableView.reloadData()
         updateTotalItemsAndPrice()
     }
@@ -687,6 +758,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @objc func checkoutButtonTapped() {
        
             self.menuItems.removeAll()
+        if celected_Menu.isEmpty {
+            showEmptyCartAlert()
+        } else {
+            self.celected_Menu.removeAll()
             self.tableView.reloadData()
             self.updateTotalItemsAndPrice()
             self.showEnjoyYourCoffee()
@@ -717,7 +792,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 label.text = ""
                 checkOutLabel.text = "ENJOY YOUR COFFEE"
-                self.checkoutButton.backgroundColor = .white
+                self.checkoutButton.backgroundColor = .color1
                 checkOutLabel.textColor = .black
                 imageView.image = UIImage(systemName: "cup.and.saucer.fill")
                 imageView.tintColor = .black
@@ -740,7 +815,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     label.text = "0.0"
                     checkOutLabel.text = "CHECK OUT"
                     checkOutLabel.textColor = .white
-                    self.checkoutButton.backgroundColor = #colorLiteral(red: 0.1921568627, green: 0.2196078431, blue: 0.262745098, alpha: 1)
+                    self.checkoutButton.backgroundColor = .color4
                     self.checkoutButton.tintColor = .white
                     imageView.image = UIImage(systemName: "dollarsign.square.fill")
                     imageView.tintColor = .white
@@ -757,12 +832,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menuItems.isEmpty ? 1 : menuItems.count
+        return celected_Menu.isEmpty ? 1 : celected_Menu.count
     }
     
     // 셀 내부 요소 정보 표시
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if menuItems.isEmpty {
+        if celected_Menu.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyStateCell") ?? UITableViewCell(style: .default, reuseIdentifier: "EmptyStateCell")
             
             for subview in cell.contentView.subviews {
@@ -773,9 +848,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             messageLabel.translatesAutoresizingMaskIntoConstraints = false
             messageLabel.numberOfLines = 0
             messageLabel.textAlignment = .center
-            messageLabel.textColor = .black
-            messageLabel.font = .systemFont(ofSize: 14)
-            messageLabel.backgroundColor = .white
+            messageLabel.textColor = .textColor
+            messageLabel.font = .h3
+            messageLabel.backgroundColor = .color2
             messageLabel.layer.cornerRadius = 12
             messageLabel.clipsToBounds = true
             let fullText = """
@@ -795,8 +870,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             NSLayoutConstraint.activate([
                 messageLabel.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 10),
-                messageLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 20),
-                messageLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20),
+                messageLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 12),
+                messageLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -12),
                 messageLabel.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -20),
                 messageLabel.heightAnchor.constraint(equalToConstant: 130)
                 
@@ -806,7 +881,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "OrderTableCell", for: indexPath) as! OrderTableCell
-            let menuItem = menuItems[indexPath.row]
+            let menuItem = celected_Menu[indexPath.row]
             
             cell.nameLabel.text = menuItem.menuName
             cell.priceLabel.text = "\(menuItem.menuPrice)"
@@ -814,14 +889,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell.indexPath = indexPath
             cell.delegate = self
             cell.selectionStyle = .none
-            cell.backgroundColor = .clear
+            cell.backgroundColor = .color3 // B. 기존 .clear
             
             return cell
         }
     }
     //테이블 뷰 셀 높이 설정
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if menuItems.isEmpty {
+        if celected_Menu.isEmpty {
             return UITableView.automaticDimension
         } else {
             return 78
@@ -830,18 +905,64 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // + 버튼 로직
     func didTapPlusButton(on cell: OrderTableCell, at indexPath: IndexPath) {
-        menuItems[indexPath.row].quantity += 1
+        celected_Menu[indexPath.row].quantity += 1
         tableView.reloadRows(at: [indexPath], with: .none)
         updateTotalItemsAndPrice()
     }
     // - 버튼 로직
     func didTapMinusButton(on cell: OrderTableCell, at indexPath: IndexPath) {
-        if menuItems[indexPath.row].quantity > 1 {
-            menuItems[indexPath.row].quantity -= 1
+        if celected_Menu[indexPath.row].quantity > 1 {
+            celected_Menu[indexPath.row].quantity -= 1
             tableView.reloadRows(at: [indexPath], with: .none)
             updateTotalItemsAndPrice()
         }
     }
     
+    
+//    // V 카테고리 보더라인 변경 함수
+//    private func updateButtonBorderColors() {
+//        view.recursiveSubviews.forEach { subview in
+//            if let button = subview as? UIButton, button.layer.borderWidth == 2 {
+//                button.layer.borderColor = UIColor.borderLineColor?.cgColor
+//            }
+//        }
+//    }
+    
+    
+    
+    // 카테고리 버튼 클릭시 태그 전달
+    @objc func categoryButtonTapped(_ sender: UIButton) {
+        for case let button as UIButton in (sender.superview?.subviews ?? []) {
+            button.layer.borderWidth = 0
+            button.layer.borderColor = UIColor.clear.cgColor
+        }
+        
+        sender.layer.borderWidth = 2
+        sender.layer.borderColor = UIColor.borderLineColor?.cgColor
+//        updateButtonBorderColors()
+        
+        switch sender.tag {
+        case 0:
+            menuItems = MenuItem.best_Menu
+        case 1:
+            menuItems = MenuItem.coffee_Menu
+        case 2:
+            menuItems = MenuItem.drinks_Menu
+        case 3:
+            menuItems = MenuItem.bites_Menu
+        case 4:
+            menuItems = MenuItem.pizza_Menu
+        default:
+            menuItems = []
+        }
+        menuCollectionView.reloadData() // 데이터 변경 후 컬렉션뷰 리로드
+    }
+    
 }
 
+
+//extension UIView {
+//    var recursiveSubviews: [UIView] {
+//        return subviews + subviews.flatMap { $0.recursiveSubviews }
+//    }
+//}

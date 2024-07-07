@@ -3,21 +3,20 @@
 //  teamProjectCafeHooligan
 //
 //  Created by mac on 7/5/24.
-//
+// V 메뉴리스트 셀 만들기
 
 import UIKit
 
 class MenuItemCell: UICollectionViewCell {
     
-    // V 셀의 식별자를 정의합니다.
+    // V 셀 식별자 정의
     static let identifier = "MenuItemCell"
     
-    // V 이미지 뷰를 생성합니다.
+    // V 셀 내의 이미지뷰 생성
     let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .white
         imageView.layer.cornerRadius = 10
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -28,7 +27,9 @@ class MenuItemCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.font = UIFont.h2
+        label.textColor = .textColor
+        label.font = .h2//UIFont.systemFont(ofSize: 18, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -38,7 +39,9 @@ class MenuItemCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.font = UIFont.h2
+        label.textColor = .textColor
+        label.font = .h2//UIFont.systemFont(ofSize: 18, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -46,7 +49,7 @@ class MenuItemCell: UICollectionViewCell {
     // V 초기화 메서드를 정의합니다.
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .darkGray
+        contentView.backgroundColor = .color1 //.darkGray
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
         contentView.addSubview(imageView)
@@ -78,7 +81,8 @@ class MenuItemCell: UICollectionViewCell {
     
     // V 셀을 구성하는 메서드를 정의합니다.
     func configure(with menuItem: MenuItem) {
-        imageView.image = UIImage(systemName: menuItem.imageName)
+        // V 이미지 에셋 업로드 되면 systemName -> named로 변경
+        imageView.image = UIImage(named: menuItem.imageName)
         nameLabel.text = menuItem.menuName
         priceLabel.text = "\(menuItem.menuPrice)"
     }
