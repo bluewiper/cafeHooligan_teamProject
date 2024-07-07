@@ -22,7 +22,7 @@ class MenuItemCell: UICollectionViewCell {
         return imageView
     }()
     
-    // V 이름 라벨을 생성합니다.
+    // V 메뉴명 레이블
     let nameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -34,7 +34,7 @@ class MenuItemCell: UICollectionViewCell {
         return label
     }()
     
-    // V 가격 라벨을 생성합니다.
+    // V 가격 레이블
     let priceLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -46,7 +46,6 @@ class MenuItemCell: UICollectionViewCell {
         return label
     }()
     
-    // V 초기화 메서드를 정의합니다.
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .color1 //.darkGray
@@ -56,7 +55,6 @@ class MenuItemCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
         contentView.addSubview(priceLabel)
         
-        // V 레이아웃 제약 조건을 활성화합니다.
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
@@ -74,14 +72,11 @@ class MenuItemCell: UICollectionViewCell {
         ])
     }
     
-    // V 초기화 실패 시 오류를 던지는 메서드를 정의합니다.
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // V 셀을 구성하는 메서드를 정의합니다.
     func configure(with menuItem: MenuItem) {
-        // V 이미지 에셋 업로드 되면 systemName -> named로 변경
         imageView.image = UIImage(named: menuItem.imageName)
         nameLabel.text = menuItem.menuName
         priceLabel.text = "\(menuItem.menuPrice)"

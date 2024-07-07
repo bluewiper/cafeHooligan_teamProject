@@ -85,7 +85,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+        return UIEdgeInsets(top: 8, left: 14, bottom: 0, right: 14)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -117,7 +117,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         }
         updateToggleButtonIcon() // 모드 전환 후 아이콘 업데이트
     }
-    
+
     // B. 사용자 인터페이스 색상 모드 변화 감지, 이전 색상 모드와 현재 색상 모드가 다를 경우에만 실행
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -125,8 +125,20 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         // B. 현재 인터페이스 스타일에 따라 버튼 이미지 업데이트
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             updateToggleButtonIcon()
-            // V 카테고리 보더라인 변경
-            //            updateButtonBorderColors()
+            // V 카테고리 버튼 보더라인 색상 업데이트
+            updateCategoryButtonBorders()
+        }
+    }
+    
+    // 모드 변경에 따른 카테고리 보더라인 변경 메서드
+    private func updateCategoryButtonBorders() {
+        if let scrollView = view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView,
+           let stackView = scrollView.subviews.first(where: { $0 is UIStackView }) as? UIStackView {
+            for case let button as UIButton in stackView.arrangedSubviews {
+                if button.layer.borderWidth == 2 {
+                    button.layer.borderColor = UIColor.borderLineColor?.cgColor
+                }
+            }
         }
     }
     
@@ -325,8 +337,7 @@ class CustomButton: UIButton {
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, OrderTableCellDelegate {
     
     // V 카테고리 통일 예정
-    let categoriesLightMode = Category_LightMode.category_LightMode
-    let categoriesDarkMode = Category_DarkMode.category_DarkMode
+    let categories = Category.category
     var menuItems = MenuItem.best_Menu
     
     
@@ -458,8 +469,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         ])
         
         // Add buttons to the stack view
-        for (index, _) in categoriesLightMode.enumerated() {
-            let button = createCategoryButton(imageName: categoriesDarkMode[index].categoryImageName, title: categoriesDarkMode[index].name, tag: index)
+        for (index, _) in categories.enumerated() {
+            let button = createCategoryButton(imageName: categories[index].categoryImageName, title: categories[index].name, tag: index)
             stackView.addArrangedSubview(button)
         }
         // 기본적으로 "Best" 버튼에 스트로크 설정
@@ -561,8 +572,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = false
-        imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 28).isActive = true
         
         // Title
         let label = UILabel()
@@ -592,6 +603,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         return button
     }
+    
     
     
     let topOverLayView: UIView = {
@@ -840,16 +852,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // 삭제 버튼 색상 업데이트
         let deleteButtonTextColor = shouldDisableButtons ? originalTextColor : highlightedTextColor
         if let stackView = deleteButton.subviews.first as? UIStackView {
-                if let label = stackView.arrangedSubviews[0] as? UILabel {
-                    label.textColor = deleteButtonTextColor
-                }
-                if let imageView = stackView.arrangedSubviews[1] as? UIImageView {
-                    imageView.tintColor = deleteButtonTextColor
-                }
-                if let deleteLabel = stackView.arrangedSubviews[2] as? UILabel {
-                    deleteLabel.textColor = deleteButtonTextColor
-                }
+            if let label = stackView.arrangedSubviews[0] as? UILabel {
+                label.textColor = deleteButtonTextColor
             }
+            if let imageView = stackView.arrangedSubviews[1] as? UIImageView {
+                imageView.tintColor = deleteButtonTextColor
+            }
+            if let deleteLabel = stackView.arrangedSubviews[2] as? UILabel {
+                deleteLabel.textColor = deleteButtonTextColor
+            }
+        }
     }
     
     
@@ -951,28 +963,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    
-    //    // V 카테고리 보더라인 변경 함수
-    //    private func updateButtonBorderColors() {
-    //        view.recursiveSubviews.forEach { subview in
-    //            if let button = subview as? UIButton, button.layer.borderWidth == 2 {
-    //                button.layer.borderColor = UIColor.borderLineColor?.cgColor
-    //            }
-    //        }
-    //    }
-    
-    
-    
-    // 카테고리 버튼 클릭시 태그 전달
+    // V 카테고리 버튼 클릭 시 태그 전달
     @objc func categoryButtonTapped(_ sender: UIButton) {
-        for case let button as UIButton in (sender.superview?.subviews ?? []) {
-            button.layer.borderWidth = 0
-            button.layer.borderColor = UIColor.clear.cgColor
+        if let scrollView = view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView,
+           let stackView = scrollView.subviews.first(where: { $0 is UIStackView }) as? UIStackView {
+            for case let button as UIButton in stackView.arrangedSubviews {
+                button.layer.borderWidth = 0
+                button.layer.borderColor = UIColor.clear.cgColor
+            }
         }
         
         sender.layer.borderWidth = 2
-        sender.layer.borderColor = UIColor.borderLineColor?.cgColor
-        //        updateButtonBorderColors()
+        // 다크 모드일 때 색상 강제 설정
+        if traitCollection.userInterfaceStyle == .dark {
+            sender.layer.borderColor = UIColor.white.cgColor
+        } else {
+            sender.layer.borderColor = UIColor.borderLineColor?.cgColor
+        }
         
         switch sender.tag {
         case 0:
@@ -988,16 +995,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         default:
             menuItems = []
         }
-        menuCollectionView.reloadData() // 데이터 변경 후 컬렉션뷰 리로드
+        
+        menuCollectionView.reloadData()
     }
-    
-    
-    
-    
 }
 
-//extension UIView {
-//    var recursiveSubviews: [UIView] {
-//        return subviews + subviews.flatMap { $0.recursiveSubviews }
-//    }
-//}
+
