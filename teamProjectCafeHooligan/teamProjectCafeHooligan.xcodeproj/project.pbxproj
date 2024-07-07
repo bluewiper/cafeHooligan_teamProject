@@ -10,20 +10,22 @@
 		0429B3572C37C503004283B3 /* Beiruti-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0429B3562C37C503004283B3 /* Beiruti-VariableFont_wght.ttf */; };
 		0451ECAA2C365B6B00270737 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0451ECA92C365B6B00270737 /* Data.swift */; };
 		04530AD82C37B03800980813 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04530AD72C37B03800980813 /* CustomCollectionViewCell.swift */; };
+		2324FF052C3A76DC00344A5B /* Beiruti-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2324FF032C3A76DC00344A5B /* Beiruti-Medium.ttf */; };
+		2324FF062C3A76DC00344A5B /* Beiruti-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2324FF042C3A76DC00344A5B /* Beiruti-Light.ttf */; };
 		233501902C36EAEC00EA2B37 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		237A27102C3535D000627133 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A270F2C3535D000627133 /* AppDelegate.swift */; };
 		237A27122C3535D000627133 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A27112C3535D000627133 /* SceneDelegate.swift */; };
 		237A27142C3535D000627133 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237A27132C3535D000627133 /* ViewController.swift */; };
 		237A27192C3535D200627133 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 237A27182C3535D200627133 /* Assets.xcassets */; };
 		237A271C2C3535D200627133 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 237A271B2C3535D200627133 /* Base */; };
-		54F448B82C3A4B530003C41C /* Beiruti-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 54F448B62C3A4B520003C41C /* Beiruti-Light.ttf */; };
-		54F448B92C3A4B530003C41C /* Beiruti-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 54F448B72C3A4B520003C41C /* Beiruti-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0429B3562C37C503004283B3 /* Beiruti-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Beiruti-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		0451ECA92C365B6B00270737 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		04530AD72C37B03800980813 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		2324FF032C3A76DC00344A5B /* Beiruti-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Beiruti-Medium.ttf"; sourceTree = "<group>"; };
+		2324FF042C3A76DC00344A5B /* Beiruti-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Beiruti-Light.ttf"; sourceTree = "<group>"; };
 		237A270C2C3535D000627133 /* teamProjectCafeHooligan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = teamProjectCafeHooligan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		237A270F2C3535D000627133 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		237A27112C3535D000627133 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -31,8 +33,6 @@
 		237A27182C3535D200627133 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		237A271B2C3535D200627133 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		237A271D2C3535D200627133 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		54F448B62C3A4B520003C41C /* Beiruti-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Beiruti-Light.ttf"; path = "../../../../Downloads/Beiruti-Light.ttf"; sourceTree = "<group>"; };
-		54F448B72C3A4B520003C41C /* Beiruti-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Beiruti-Medium.ttf"; path = "../../../../Downloads/Beiruti-Medium.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,8 +49,8 @@
 		2335018E2C36EAC100EA2B37 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				54F448B62C3A4B520003C41C /* Beiruti-Light.ttf */,
-				54F448B72C3A4B520003C41C /* Beiruti-Medium.ttf */,
+				2324FF042C3A76DC00344A5B /* Beiruti-Light.ttf */,
+				2324FF032C3A76DC00344A5B /* Beiruti-Medium.ttf */,
 				0429B3562C37C503004283B3 /* Beiruti-VariableFont_wght.ttf */,
 			);
 			path = Fonts;
@@ -146,11 +146,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54F448B92C3A4B530003C41C /* Beiruti-Medium.ttf in Resources */,
+				2324FF052C3A76DC00344A5B /* Beiruti-Medium.ttf in Resources */,
 				0429B3572C37C503004283B3 /* Beiruti-VariableFont_wght.ttf in Resources */,
 				233501902C36EAEC00EA2B37 /* (null) in Resources */,
-				54F448B82C3A4B530003C41C /* Beiruti-Light.ttf in Resources */,
 				237A27192C3535D200627133 /* Assets.xcassets in Resources */,
+				2324FF062C3A76DC00344A5B /* Beiruti-Light.ttf in Resources */,
 				237A271C2C3535D200627133 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
