@@ -126,7 +126,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             updateToggleButtonIcon()
             // V 카테고리 보더라인 변경
-//            updateButtonBorderColors()
+            //            updateButtonBorderColors()
         }
     }
     
@@ -321,6 +321,7 @@ class CustomButton: UIButton {
 }
 
 
+//MARK: viewcontoller
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, OrderTableCellDelegate {
     
     // V 카테고리 통일 예정
@@ -359,6 +360,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         
         view.backgroundColor = .color1Custom
+        
+        initializeCheckoutButton()
         
         // B. 로고 이미지
         logoImageView.contentMode = .scaleAspectFit
@@ -484,7 +487,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         menuCollectionView.register(MenuItemCell.self, forCellWithReuseIdentifier: "MenuCell")
         //하단
-        super.viewDidLoad()
+        
         
         view.addSubview(tableView)
         view.addSubview(buttonContainer)
@@ -497,6 +500,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(OrderTableCell.self, forCellReuseIdentifier: "OrderTableCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "EmptyStateCell")
         tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 100, right: 0)
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         checkoutButton.addTarget(self, action: #selector(checkoutButtonTapped), for: .touchUpInside)
@@ -719,63 +723,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var celected_Menu: [MenuItem] = []
     
     
-    
-    
-    //총 수량, 총 가격 로직
-    func updateTotalItemsAndPrice() {
-        let totalItems = celected_Menu.reduce(0) { $0 + $1.quantity }
-        let totalPrice = celected_Menu.reduce(0.0) { $0 + ($1.menuPrice * Double($1.quantity)) }
-        
-        if let deleteLabel = (deleteButton.subviews.first as? UIStackView)?.arrangedSubviews[0] as? UILabel {
-            deleteLabel.text = "\(totalItems)"
-        }
-        
-        if let priceLabel = (checkoutButton.subviews.first as? UIStackView)?.arrangedSubviews[1] as? UILabel {
-            priceLabel.text = String(format: "%.1f", totalPrice)
-        }
-        
-        tableView.isScrollEnabled = !menuItems.isEmpty
-        
-        //아이템 없을 시 버튼 비활성화
-        if menuItems.isEmpty {
-            checkoutButton.isEnabled = false
-            checkoutButton.backgroundColor = checkoutButton.backgroundColor?.withAlphaComponent(0.5)
-        } else {
-            checkoutButton.isEnabled = true
-            checkoutButton.backgroundColor = checkoutButton.backgroundColor?.withAlphaComponent(1.0)
-        }
-        tableView.isScrollEnabled = !celected_Menu.isEmpty
-    }
-    
-    //전체 삭제 버튼 로직
-    @objc func deleteButtonTapped() {
-        celected_Menu.removeAll()
-        tableView.reloadData()
-        updateTotalItemsAndPrice()
-    }
-    
-    //결제완료 버튼 로직
-    @objc func checkoutButtonTapped() {
-       
-            self.menuItems.removeAll()
-        if celected_Menu.isEmpty {
-            showEmptyCartAlert()
-        } else {
-            self.celected_Menu.removeAll()
-            self.tableView.reloadData()
-            self.updateTotalItemsAndPrice()
-            self.showEnjoyYourCoffee()
-        
-    }
-    //빈 장바구니 알림창
-    func showEmptyCartAlert() {
-        let alert = UIAlertController(title: "Alert", message: "Your cart is empty.", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(okAction)
-        present(alert, animated: true, completion: nil)
-    }
-    
-    // 버튼 애니메이션
+    //결제 버튼 애니메이션
     func showEnjoyYourCoffee() {
         if let stackView = checkoutButton.subviews.first as? UIStackView,
            let imageView = stackView.arrangedSubviews[0] as? UIImageView,
@@ -792,7 +740,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 label.text = ""
                 checkOutLabel.text = "ENJOY YOUR COFFEE"
-                self.checkoutButton.backgroundColor = .color1
+                self.checkoutButton.backgroundColor = .white
                 checkOutLabel.textColor = .black
                 imageView.image = UIImage(systemName: "cup.and.saucer.fill")
                 imageView.tintColor = .black
@@ -826,13 +774,93 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         imageView.alpha = 1
                         label.alpha = 1
                     }
+                    self.initializeCheckoutButton()
                 }
             }
         }
     }
     
+    
+    
+    
+    //결제완료 버튼 로직
+    @objc func checkoutButtonTapped() {
+        
+        //        self.menuItems.removeAll()
+        if celected_Menu.isEmpty {
+            showEmptyCartAlert()
+        } else {
+            self.celected_Menu.removeAll()
+            self.tableView.reloadData()
+            self.updateTotalItemsAndPrice()
+            self.showEnjoyYourCoffee()
+            self.initializeCheckoutButton()
+        }
+    }
+    
+    //전체 삭제 버튼 로직
+    @objc func deleteButtonTapped() {
+        celected_Menu.removeAll()
+        tableView.reloadData()
+        updateTotalItemsAndPrice()
+    }
+    //삭제 버튼 비활성화, 활성화 색상
+    let originalTextColor: UIColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+    let highlightedTextColor: UIColor = .black
+    
+    //빈 장바구니 알림창
+    func showEmptyCartAlert() {
+        let alert = UIAlertController(title: "Alert", message: "Your cart is empty.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    //총 수량, 총 가격 로직
+    func updateTotalItemsAndPrice() {
+        let totalItems = celected_Menu.reduce(0) { $0 + $1.quantity }
+        let totalPrice = celected_Menu.reduce(0.0) { $0 + ($1.menuPrice * Double($1.quantity)) }
+        
+        if let deleteLabel = (deleteButton.subviews.first as? UIStackView)?.arrangedSubviews[0] as? UILabel {
+            deleteLabel.text = "\(totalItems)"
+        }
+        
+        if let priceLabel = (checkoutButton.subviews.first as? UIStackView)?.arrangedSubviews[1] as? UILabel {
+            priceLabel.text = String(format: "%.1f", totalPrice)
+        }
+        
+        tableView.isScrollEnabled = !celected_Menu.isEmpty
+        
+        //아이템 없을 시 버튼 비활성화
+        let shouldDisableButtons = celected_Menu.isEmpty
+        checkoutButton.isEnabled = !shouldDisableButtons
+        deleteButton.isEnabled = !shouldDisableButtons
+        checkoutButton.backgroundColor = shouldDisableButtons ? checkoutButton.backgroundColor?.withAlphaComponent(0.5) : checkoutButton.backgroundColor?.withAlphaComponent(1.0)
+        
+        // 삭제 버튼 색상 업데이트
+        let deleteButtonTextColor = shouldDisableButtons ? originalTextColor : highlightedTextColor
+        if let stackView = deleteButton.subviews.first as? UIStackView {
+                if let label = stackView.arrangedSubviews[0] as? UILabel {
+                    label.textColor = deleteButtonTextColor
+                }
+                if let imageView = stackView.arrangedSubviews[1] as? UIImageView {
+                    imageView.tintColor = deleteButtonTextColor
+                }
+                if let deleteLabel = stackView.arrangedSubviews[2] as? UILabel {
+                    deleteLabel.textColor = deleteButtonTextColor
+                }
+            }
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return celected_Menu.isEmpty ? 1 : celected_Menu.count
+    }
+    // 초기화면 버튼 비활성화 함수
+    func initializeCheckoutButton() {
+        checkoutButton.isEnabled = false
+        deleteButton.isEnabled = false
+        checkoutButton.backgroundColor = checkoutButton.backgroundColor?.withAlphaComponent(0.5)
     }
     
     // 셀 내부 요소 정보 표시
@@ -903,30 +931,35 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    
     // + 버튼 로직
     func didTapPlusButton(on cell: OrderTableCell, at indexPath: IndexPath) {
         celected_Menu[indexPath.row].quantity += 1
-        tableView.reloadRows(at: [indexPath], with: .none)
+        self.tableView.reloadRows(at: [indexPath], with: .none)
         updateTotalItemsAndPrice()
     }
     // - 버튼 로직
     func didTapMinusButton(on cell: OrderTableCell, at indexPath: IndexPath) {
         if celected_Menu[indexPath.row].quantity > 1 {
             celected_Menu[indexPath.row].quantity -= 1
-            tableView.reloadRows(at: [indexPath], with: .none)
+            self.tableView.reloadRows(at: [indexPath], with: .none)
+            updateTotalItemsAndPrice()
+        } else {
+            celected_Menu.remove(at: indexPath.row)
+            tableView.reloadData()
             updateTotalItemsAndPrice()
         }
     }
     
     
-//    // V 카테고리 보더라인 변경 함수
-//    private func updateButtonBorderColors() {
-//        view.recursiveSubviews.forEach { subview in
-//            if let button = subview as? UIButton, button.layer.borderWidth == 2 {
-//                button.layer.borderColor = UIColor.borderLineColor?.cgColor
-//            }
-//        }
-//    }
+    //    // V 카테고리 보더라인 변경 함수
+    //    private func updateButtonBorderColors() {
+    //        view.recursiveSubviews.forEach { subview in
+    //            if let button = subview as? UIButton, button.layer.borderWidth == 2 {
+    //                button.layer.borderColor = UIColor.borderLineColor?.cgColor
+    //            }
+    //        }
+    //    }
     
     
     
@@ -939,7 +972,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         sender.layer.borderWidth = 2
         sender.layer.borderColor = UIColor.borderLineColor?.cgColor
-//        updateButtonBorderColors()
+        //        updateButtonBorderColors()
         
         switch sender.tag {
         case 0:
@@ -958,8 +991,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         menuCollectionView.reloadData() // 데이터 변경 후 컬렉션뷰 리로드
     }
     
+    
+    
+    
 }
-
 
 //extension UIView {
 //    var recursiveSubviews: [UIView] {
