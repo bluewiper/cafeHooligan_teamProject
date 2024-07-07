@@ -806,7 +806,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     //삭제 버튼 비활성화, 활성화 색상
     let originalTextColor: UIColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-    let highlightedTextColor: UIColor = .black
+    let highlightedTextColor = UIColor.textColor
     
     //빈 장바구니 알림창
     func showEmptyCartAlert() {
