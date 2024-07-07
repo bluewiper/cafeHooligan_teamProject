@@ -31,7 +31,7 @@ extension UIFont {
     
     /// B. beirutiMedium 20
     @nonobjc class var h2: UIFont {
-        return UIFont.font(.beirutiMedium, ofSize: 20)
+        return UIFont.font(.beirutiMedium, ofSize: 18)
     }
     
     /// B. beirutiLight 16
